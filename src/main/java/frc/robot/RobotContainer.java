@@ -4,37 +4,78 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.command;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.PIDcommand;
+import frc.robot.commands.Shooters;
+import frc.robot.commands.intake;
+import frc.robot.commands.intakecmd;
+import frc.robot.commands.shooter;
+
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and trigger mappings) should be declared here.
+ */
 public class RobotContainer {
-  // This is where you initialize your subsystems, controlers and other things that need to be initialized
-  CommandXboxController joystick = new CommandXboxController(3); //joystick; use the command xbox controller class for easy button bindings
-  ExampleSubsystem subsystem = new ExampleSubsystem();//Example subsystem initialization
-  command command = new command(subsystem, 0.32);//This is an example of how to initialize a command 
-  command zero = new command(subsystem, 0);
+  // The robot's subsystems and commands are defined here...
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final CommandXboxController joy = new CommandXboxController(0);
+  private final frc.robot.commands.pivot pivot = new frc.robot.commands.pivot();
+  private final PIDcommand comd1 = new PIDcommand(pivot, 0);
+  private final PIDcommand comd2 = new PIDcommand(pivot, 0.0);
+  private final PIDcommand comd3 = new PIDcommand(pivot, -10.6279296875);
+  private final PIDcommand comd4 = new PIDcommand(pivot, 0);
+  private final shooter sho = new shooter();
+  private final intake inta = new intake();
+
+  private final Shooters comd5 = new Shooters(sho, 0.5);
+  private final Shooters comd6 = new Shooters(sho, 0);
+  private final intakecmd comd7 = new intakecmd(inta, 0.5);
+  private final intakecmd comd8 = new intakecmd(inta, 0);
+  
+
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+
+
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    // Configure the trigger bindings
     configureBindings();
   }
-  // configureBindings is where you bind buttons to commands
-  private void configureBindings() { 
-    //joy is our controller
-    //whileTrue means while the button is held down
-    //whileFalse means while the button is not held down
-    //we want a while false so that when we let go of the button the motor stops or goes back to home position if we are using a PID controller
-    
-    joystick.a().whileTrue(command).whileFalse(zero);
-    //this is another way of initilizing the command without creating a new variablel
-    joystick.b().whileTrue(new command(subsystem, -0.32)).whileFalse(new command(subsystem, 0));
+
+  /**
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
+  private void configureBindings() {
 
 
-
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    joy.a().whileTrue(comd3).whileFalse(comd4);
+    joy.b().whileTrue(comd5).whileFalse(comd6);
+  joy.x().whileTrue(comd7).whileFalse(comd8);///
   }
-//this is where you return the auto command I will explain that more when we go over swerve drive
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    // An example command will be run in autonomous
+    return null;
   }
 }

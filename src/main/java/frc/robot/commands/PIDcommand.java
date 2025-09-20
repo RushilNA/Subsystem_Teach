@@ -1,27 +1,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.ExampleSubsystem;
 
-public class command extends Command{
-    ExampleSubsystem subsystem; 
-    double speed;
+public class PIDcommand extends Command{
+    pivot subsystem; 
+    double setpoint;
 
-    public command(ExampleSubsystem subsystem, double speed){
+    public PIDcommand(pivot subsystem, double setpoint){
         this.subsystem = subsystem;
-        this.speed = speed;
+        this.setpoint = setpoint;
+        
+        
         addRequirements(subsystem);
 
     }
 
     @Override
     public void initialize(){
+        
 
     } 
 
     @Override
     public void execute(){
-        subsystem.speed1(speed);
+        subsystem.pidmotor(setpoint);
+        
+        
         
     }
     @Override
@@ -30,9 +34,9 @@ public class command extends Command{
     }
     @Override
     public boolean isFinished(){
-        return subsystem.getPosition() > 4;
+        return false;
     }
 
     
 }
-                                                                    
+
