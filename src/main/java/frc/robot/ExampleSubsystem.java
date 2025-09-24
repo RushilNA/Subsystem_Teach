@@ -18,9 +18,7 @@ public class ExampleSubsystem extends SubsystemBase {
   //This is where you initialize motors sensors PID controllers and other things you need for your subsystem
     private TalonFX pivot = new TalonFX(1);
     private PIDController pivotPID = new PIDController(0, 0, 0);
-    double x = 3;
-    double y= 4;
-    double new1;
+    
 
 
 

@@ -30,11 +30,13 @@ public class PIDcommand extends Command{
     }
     @Override
     public void end(boolean interrupted){
+        
 
     }
     @Override
     public boolean isFinished(){
-        return false;
+        return  subsystem.getmotorposition() == setpoint;
+        
     }
 
     

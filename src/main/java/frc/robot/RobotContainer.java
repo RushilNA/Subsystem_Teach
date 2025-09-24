@@ -8,6 +8,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.PIDcommand;
@@ -27,17 +29,16 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final CommandXboxController joy = new CommandXboxController(0);
   private final frc.robot.commands.pivot pivot = new frc.robot.commands.pivot();
-  private final PIDcommand comd1 = new PIDcommand(pivot, 0);
-  private final PIDcommand comd2 = new PIDcommand(pivot, 0.0);
-  private final PIDcommand comd3 = new PIDcommand(pivot, -10.6279296875);
-  private final PIDcommand comd4 = new PIDcommand(pivot, 0);
-  private final shooter sho = new shooter();
-  private final intake inta = new intake();
+  private final PIDcommand pidhomecmd = new PIDcommand(pivot, 0);
+  private final PIDcommand pidshooterposition = new PIDcommand(pivot, -10.6279296875);
+  private final shooter shootersub = new shooter();
+  private final intake intakesub = new intake();
 
-  private final Shooters comd5 = new Shooters(sho, 0.5);
-  private final Shooters comd6 = new Shooters(sho, 0);
-  private final intakecmd comd7 = new intakecmd(inta, 0.5);
-  private final intakecmd comd8 = new intakecmd(inta, 0);
+  private final Shooters shooter = new Shooters(shootersub, 0.5);
+  private final Shooters shooterstop = new Shooters(shootersub, 0);
+  private final intakecmd intake = new intakecmd(intakesub, 0.5);
+  private final intakecmd intakestop = new intakecmd(intakesub, 0);
+  
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -64,9 +65,25 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    joy.a().whileTrue(comd3).whileFalse(comd4);
-    joy.b().whileTrue(comd5).whileFalse(comd6);
-  joy.x().whileTrue(comd7).whileFalse(comd8);///
+
+
+  joy.y().whileTrue(new SequentialCommandGroup(pidshooterposition,new ParallelCommandGroup(pidshooterposition,shooter)) ).whileFalse(new ParallelCommandGroup(pidshooterposition,new ParallelCommandGroup(pidshooterposition,shooter)) );
+
+  
+
+
+
+  //to do list
+  //first show them good naming conventions
+  //do sequential commands 
+    // need to reiterate how to finish the command 
+  // parralel 
+  //.then . stuff
+  // make commands in the subsystem 
+  // show them how to do stuff like 
+  // make them make actual bindings
+  //
+  
   }
 
   /**
