@@ -1,14 +1,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Subsytem.pivot;
 
 public class PIDcommand extends Command{
     pivot subsystem; 
     double setpoint;
+    boolean end;
 
-    public PIDcommand(pivot subsystem, double setpoint){
+    public PIDcommand(pivot subsystem, double setpoint, boolean end){
         this.subsystem = subsystem;
         this.setpoint = setpoint;
+        this.end = end;
         
         
         addRequirements(subsystem);
@@ -17,9 +20,11 @@ public class PIDcommand extends Command{
 
     @Override
     public void initialize(){
+        subsystem.resetpid();
         
 
     } 
+    
 
     @Override
     public void execute(){
@@ -35,8 +40,7 @@ public class PIDcommand extends Command{
     }
     @Override
     public boolean isFinished(){
-        return  subsystem.getmotorposition() == setpoint;
-        
+        return (setpoint+0.5 < subsystem.getmotorposition() || subsystem.getmotorposition() < setpoint -0.5) &&end;        
     }
 
     

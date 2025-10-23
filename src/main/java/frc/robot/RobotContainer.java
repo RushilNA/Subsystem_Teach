@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Subsytem.intake;
+import frc.robot.Subsytem.shooter;
 import frc.robot.commands.PIDcommand;
 import frc.robot.commands.Shooters;
-import frc.robot.commands.intake;
 import frc.robot.commands.intakecmd;
-import frc.robot.commands.shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,16 +28,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final CommandXboxController joy = new CommandXboxController(0);
-  private final frc.robot.commands.pivot pivot = new frc.robot.commands.pivot();
-  private final PIDcommand pidhomecmd = new PIDcommand(pivot, 0);
-  private final PIDcommand pidshooterposition = new PIDcommand(pivot, -10.6279296875);
+
+  private final frc.robot.Subsytem.pivot pivot = new frc.robot.Subsytem.pivot();
   private final shooter shootersub = new shooter();
   private final intake intakesub = new intake();
 
-  private final Shooters shooter = new Shooters(shootersub, 0.5);
-  private final Shooters shooterstop = new Shooters(shootersub, 0);
-  private final intakecmd intake = new intakecmd(intakesub, 0.5);
-  private final intakecmd intakestop = new intakecmd(intakesub, 0);
+
   
   
 
@@ -61,15 +57,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    
 
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // Schedule `exampleMethodCommand` when the Xbox cont roller's B button is pressed,
     // cancelling on release.
 
 
-  joy.y().whileTrue(new SequentialCommandGroup(pidshooterposition,new ParallelCommandGroup(pidshooterposition,shooter)) ).whileFalse(new ParallelCommandGroup(pidshooterposition,new ParallelCommandGroup(pidshooterposition,shooter)) );
-
+  joy.y().whileTrue
+  (new SequentialCommandGroup(new PIDcommand(pivot, -10,true),
+  new ParallelCommandGroup(new PIDcommand(pivot, -10,false),
+  new Shooters(shootersub, 0.5))))
+  .whileFalse(new ParallelCommandGroup(new PIDcommand(pivot, 0.3,false),new Shooters(shootersub, 0)));
   
+ 
+  
+  joy.x().whileTrue(pivot.pivotCmd(0));
 
 
 
@@ -83,6 +85,11 @@ public class RobotContainer {
   // show them how to do stuff like 
   // make them make actual bindings
   //
+
+  //to do list 9/25 
+  //find the motor for the transfer
+  // make a command that moves the pivot to a position and spins up the shooter - sequential command group
+  //then start working on commands inside of the subsystem
   
   }
 

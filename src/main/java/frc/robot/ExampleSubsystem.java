@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //Use the extends subsytembase to tell the code file that this is a subsystem file and so we can use the methods like periodic
 //Subsystems are used to control motors and read sensors
+
 public class ExampleSubsystem extends SubsystemBase {
   //This is where you initialize motors sensors PID controllers and other things you need for your subsystem
     private TalonFX pivot = new TalonFX(1);

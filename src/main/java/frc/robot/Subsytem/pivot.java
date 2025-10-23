@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.Subsytem;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,38 +34,58 @@ SmartDashboard.putString("Current Command", currentCommand);
     public void pidmotor(double setpoint){
         double output = pid.calculate(motor.getPosition().getValueAsDouble(),setpoint);
         motor.set(output);
+        SmartDashboard.putNumber("Output", output);
+
 
     }
     public double getmotorposition(){
         return motor.getPosition().getValueAsDouble();
         
     }
+    
+    public void setCurrentCommand(String commandName) {
+        currentCommand = commandName;
+    }
 
-    public Command test(){
+    public Command pivotCommand(){
         return new Command() {
-            @Override
-            public void initialize() {
-                currentCommand = "test";
-                
-            }
-
-            @Override
-            public void execute() {
-            }
-
-            @Override
-            public void end(boolean interrupted) {
-                
-                
-            }
-
-            @Override
-            public boolean isFinished() {
-                return false;
-            }
+            
         };
+        
+
+
     }
 
 
+    public void resetpid(){
+        pid.reset();
+    }
 
-}
+    public Command pivotCmd(double setpoint){  
+        return new Command() {
+            
+        
+        @Override
+        public void initialize(){
+            
+        } 
+        
+    
+        @Override
+        public void execute(){
+        motor.set(pid.calculate(motor.getPosition().getValueAsDouble(),setpoint));            
+            
+        }
+        @Override
+        public void end(boolean interrupted){
+
+            }
+
+
+
+
+  
+
+
+};
+    }}
